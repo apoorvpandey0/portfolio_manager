@@ -67,14 +67,25 @@ Start Content
                   <p>{{p.description}}</p>
                 </div>
               </div>
-              <div class="col">
-                <h4 class="title">Tags</h4>
-                {% for tag in p.tags.all %}
-                  <button type="button" class="btn btn-outline-secondary" style="font-size: small; padding: 7px; margin-bottom: 3px;">{{tag}}</button>  
-                {% endfor %}      
-              </div>
+             
             </div>
+            
+            {% if p.tags.all %}
+            <div class="row " style="margin-top: 15px;">
+              <div class="col-lg-6 col-md-6"></div>
+              <div class="col-1" style="margin-right: 12px;">
+                <h5>Tags:</h5>
+              </div>
+              <div class="col" >
+                {% for tag in p.tags.all %}
+                <button type="button" class="btn btn-outline-secondary" style="font-size: small; padding: 7px; margin-bottom: 3px;">{{tag}}</button>  
+              {% endfor %}     
+              </div>
+              </div>
           </div>
+              
+            {% endif %}
+              
           
           {% endfor %}
 
