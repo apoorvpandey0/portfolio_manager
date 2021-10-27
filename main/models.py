@@ -2,12 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from ckeditor.fields import RichTextField
+from taggit.managers import TaggableManager
 
 
 class Skill(models.Model):
     class Meta:
         verbose_name_plural = 'Skills'
         verbose_name = 'Skill'
+        ordering = ['-score']
     
     name = models.CharField(max_length=20, blank=True, null=True)
     score = models.IntegerField(default=80, blank=True, null=True)
@@ -94,10 +96,13 @@ class Portfolio(models.Model):
         ordering = ["name"]
     date = models.DateTimeField(blank=True, null=True)
     name = models.CharField(max_length=200, blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    description = models.TextField(max_length=500, blank=True, null=True)
     body = RichTextField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True, upload_to="portfolio")
     slug = models.SlugField(null=True, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+
     is_active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
@@ -122,11 +127,16 @@ class Blog(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     author = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=200, blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    description = models.TextField(max_length=500, blank=True, null=True)
     body = RichTextField(blank=True, null=True)
     slug = models.SlugField(null=True, blank=True)
     image = models.ImageField(blank=True, null=True, upload_to="blog")
+    tags = TaggableManager()
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+
     is_active = models.BooleanField(default=True)
+    
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -149,7 +159,9 @@ class Certificate(models.Model):
     date = models.DateTimeField(blank=True, null=True)
     name = models.CharField(max_length=50, blank=True, null=True)
     title = models.CharField(max_length=200, blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    description = models.TextField(max_length=500, blank=True, null=True)
+    link = models.URLField(blank=True, null=True)
+    image = models.ImageField(blank=True, null=True, upload_to="certificates")
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
